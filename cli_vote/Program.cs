@@ -52,6 +52,9 @@ namespace cli_vote
             Console.Write("Enter your vote (01 = YES, 02 = NO, or number for multiple choice votes): ");
             Global.vote = Console.ReadLine();
 
+            Console.Write("Debug to LOG.TXT (Y/N) **IMPORTANT WARNING ABOVE**: ");
+            Global.debug = (Console.ReadLine().ToLower() == "y");
+
 
             Dictionary<string, decimal> balances = new Dictionary<string, decimal>();
             Dictionary<string, string> utxo = new Dictionary<string, string>();
@@ -94,8 +97,8 @@ namespace cli_vote
             foreach (string addr in balances.Keys)
                 Utility.log(addr + " " + balances[addr]);
 
-            Console.WriteLine("Total coins found: " + total);
             Console.WriteLine("*******************************************");
+            Console.WriteLine("Total coins found: " + total);
             Console.WriteLine("Please verify and confirm the following:");
             Console.WriteLine("NFT HASH TO VOTE ON: " + Global.txid_proposal);
             Console.WriteLine("VOTE: " + Global.vote);
@@ -146,6 +149,7 @@ namespace cli_vote
                         command = "{ \"id\": 0, \"method\" : \"sendrawtransaction\", \"params\" : [\"" + dSignedTransaction.result.hex + "\"] }";
                         dynamic dTXID = JObject.Parse(Utility.rpcExec(command));
 
+                        Console.WriteLine(dTXID.result);
 
                     }
             }

@@ -11,5 +11,7 @@ namespace cli_vote
 
         public static string server, port, username, password, wallet, walletpass, txid_proposal, vote, min_balance;
 
+        public static bool debug;
+
     }
 }

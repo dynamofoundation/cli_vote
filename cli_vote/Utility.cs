@@ -61,6 +61,8 @@ namespace cli_vote
 
         public static void log(string data)
         {
+            if (!Global.debug)
+                return;
             File.AppendAllText("log.txt", data + "\r\n");
         }
 
