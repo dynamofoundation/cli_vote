@@ -16,10 +16,14 @@ namespace cli_vote
             Console.WriteLine("This utility will cast a vote for all coins");
             Console.WriteLine("held in an HD wallet hosted by a fullnode or");
             Console.WriteLine("QT server.");
+            Console.WriteLine("IMPORTANT: If you enable debug, this utility");
+            Console.WriteLine("will write unencrypted copies of your private");
+            Console.WriteLine("keys to the local disk in the same directory");
+            Console.WriteLine("that this utility is run to a file called");
+            Console.WriteLine("LOG.TXT.  Please secure or delete this file ");
+            Console.WriteLine("after usage.");
             Console.WriteLine("*******************************************");
 
-
-            /*
 
             Console.Write("Enter rpc server name or address: ");
             Global.server = Console.ReadLine();
@@ -43,22 +47,10 @@ namespace cli_vote
             Global.min_balance = Console.ReadLine();
 
             Console.Write("Enter TXID of voting proposal: ");
-            Global.nft_hash = Console.ReadLine();
+            Global.txid_proposal = Console.ReadLine();
 
             Console.Write("Enter your vote (01 = YES, 02 = NO, or number for multiple choice votes): ");
             Global.vote = Console.ReadLine();
-
-            */
-
-            Global.server = "192.168.4.48";
-            Global.port = "6433";
-            Global.username = "user";
-            Global.password = "123456";
-            Global.wallet = "testvote";
-            Global.walletpass = "";
-            Global.txid_proposal = "0000000000000000000000000000000000000000000000000000000000000000";
-            Global.vote = "60";
-            Global.min_balance = "0.1";
 
 
             Dictionary<string, decimal> balances = new Dictionary<string, decimal>();
