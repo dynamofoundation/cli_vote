@@ -37,7 +37,7 @@ namespace cli_vote
             Console.Write("Enter rpc server password: ");
             Global.password = Console.ReadLine();
 
-            Console.Write("Enter wallet name: ");
+            Console.Write("Enter wallet name (leave blank for currently loaded QT wallet): ");
             Global.wallet = Console.ReadLine();
 
             Console.Write("Enter wallet password (or blank of none): ");
@@ -59,8 +59,13 @@ namespace cli_vote
             Dictionary<string, decimal> balances = new Dictionary<string, decimal>();
             Dictionary<string, string> utxo = new Dictionary<string, string>();
 
-            string command = "{ \"id\": 0, \"method\" : \"loadwallet\", \"params\" : [ \"" + Global.wallet + "\" ] }";
-            Utility.rpcExec(command);
+            string command;
+
+            if (Global.wallet.Length > 0)
+            {
+                command = "{ \"id\": 0, \"method\" : \"loadwallet\", \"params\" : [ \"" + Global.wallet + "\" ] }";
+                Utility.rpcExec(command);
+            }
 
             command = "{ \"id\": 0, \"method\" : \"listunspent\", \"params\" : [ ] }";
             string result = Utility.rpcExec(command);
