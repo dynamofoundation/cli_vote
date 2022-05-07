@@ -29,7 +29,7 @@ namespace cli_vote
             Console.Write("Enter rpc server name or address: ");
             Global.server = Console.ReadLine();
 
-            Console.Write("Enter rpc server name port: ");
+            Console.Write("Enter rpc server port: ");
             Global.port = Console.ReadLine();
 
             Console.Write("Enter rpc server username: ");
@@ -38,7 +38,7 @@ namespace cli_vote
             Console.Write("Enter rpc server password: ");
             Global.password = Console.ReadLine();
 
-            Console.Write("Enter wallet name (leave blank for currently loaded QT wallet): ");
+            Console.Write("Enter wallet name: ");
             Global.wallet = Console.ReadLine();
 
             Console.Write("Enter wallet password (or blank if none): ");
@@ -133,11 +133,11 @@ namespace cli_vote
                     {
                         string message = "020000" + Global.vote + Global.txid_proposal + Utility.ByteArrayToHexString(Encoding.ASCII.GetBytes(addr));
                         command = "{ \"id\": 0, \"method\" : \"dumpprivkey\", \"params\" : [ \"" + addr + "\" ] }";
-                        dynamic privkey = JObject.Parse(Utility.rpcExec(command));
+                        dynamic privkey = JObject.Parse(Utility.rpcExec(command, Global.wallet));
                         string strPrivkey = privkey.result;
 
                         command = "{ \"id\": 0, \"method\" : \"signmessagewithprivkey\", \"params\" : [ \"" + strPrivkey + "\", \"" + message + "\" ] }";
-                        dynamic signature = JObject.Parse(Utility.rpcExec(command));
+                        dynamic signature = JObject.Parse(Utility.rpcExec(command, Global.wallet));
                         string strSig = signature.result;
                         string hexSig = Utility.ByteArrayToHexString(Encoding.ASCII.GetBytes(strSig));
 
