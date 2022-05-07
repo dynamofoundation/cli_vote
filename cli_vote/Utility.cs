@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace cli_vote
 {
@@ -14,11 +15,16 @@ namespace cli_vote
         static HttpWebRequest webRequest;
 
 
-        public static string rpcExec(string command)
+        public static string rpcExec(string command, string postfix = "")
         {
             log(command);
 
-            webRequest = (HttpWebRequest)WebRequest.Create("http://" + Global.server + ":" + Global.port);
+            string URI = "http://" + Global.server + ":" + Global.port;
+
+            if (postfix.Length > 0) 
+                URI += "/wallet/" + HttpUtility.UrlPathEncode(postfix);
+
+            webRequest = (HttpWebRequest)WebRequest.Create(URI);
             webRequest.KeepAlive = false;
             webRequest.Timeout = 300000;
 

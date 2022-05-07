@@ -13,6 +13,7 @@ namespace cli_vote
 
             Console.WriteLine("*******************************************");
             Console.WriteLine("Dynamo coin command line voting utiity");
+            Console.WriteLine("VERSION 1.3");
             Console.WriteLine("This utility will cast a vote for all coins");
             Console.WriteLine("held in an HD wallet hosted by a fullnode or");
             Console.WriteLine("QT server.");
@@ -40,7 +41,7 @@ namespace cli_vote
             Console.Write("Enter wallet name (leave blank for currently loaded QT wallet): ");
             Global.wallet = Console.ReadLine();
 
-            Console.Write("Enter wallet password (or blank of none): ");
+            Console.Write("Enter wallet password (or blank if none): ");
             Global.walletpass = Console.ReadLine();
 
             Console.Write("Enter minimum address balance to vote (e.g. 0.1): ");
@@ -60,15 +61,28 @@ namespace cli_vote
             Dictionary<string, string> utxo = new Dictionary<string, string>();
 
             string command;
+            string result;
+
+            /*
+            command = "{ \"id\": 0, \"method\" : \"listwalletdir\", \"params\" : [ ] }";
+            result = Utility.rpcExec(command);
+            */
 
             if (Global.wallet.Length > 0)
             {
                 command = "{ \"id\": 0, \"method\" : \"loadwallet\", \"params\" : [ \"" + Global.wallet + "\" ] }";
-                Utility.rpcExec(command);
+                result = Utility.rpcExec(command);
+
+                if (Global.walletpass.Length > 0)
+                {
+                    command = "{ \"id\": 0, \"method\" : \"walletpassphrase\", \"params\" : [ \"" + Global.walletpass + "\", 600 ] }";
+                    result = Utility.rpcExec(command, Global.wallet);
+
+                }
             }
 
             command = "{ \"id\": 0, \"method\" : \"listunspent\", \"params\" : [ ] }";
-            string result = Utility.rpcExec(command);
+            result = Utility.rpcExec(command, Global.wallet);
 
             dynamic dResult = JObject.Parse(result);
 
