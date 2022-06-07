@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net;
 using System.Text;
 
@@ -13,7 +14,7 @@ namespace cli_vote
 
             Console.WriteLine("*******************************************");
             Console.WriteLine("Dynamo coin command line voting utiity");
-            Console.WriteLine("VERSION 1.3");
+            Console.WriteLine("VERSION 1.5");
             Console.WriteLine("This utility will cast a vote for all coins");
             Console.WriteLine("held in an HD wallet hosted by a fullnode or");
             Console.WriteLine("QT server.");
@@ -104,12 +105,12 @@ namespace cli_vote
                 else
                 {
                     balances.Add(address, amount);
-                    utxo.Add(address, txid + "," + vout + "," + amount);
+                    utxo.Add(address, txid + "," + vout + "," + amount.ToString(new CultureInfo("en-US")));
                 }
 
                 total += amount;
 
-                Utility.log(txid + " " + vout + " " + address + " " + amount);
+                Utility.log(txid + " " + vout + " " + address + " " + amount.ToString(new CultureInfo("en-US")));
             }
 
             Utility.log("Summary of addresses:");
@@ -127,7 +128,7 @@ namespace cli_vote
             string confirm = Console.ReadLine();
             if (confirm == "yes")
             {
-                decimal dMinBal = Convert.ToDecimal(Global.min_balance);
+                decimal dMinBal = Convert.ToDecimal(Global.min_balance, new CultureInfo("en-US"));
                 foreach (string addr in balances.Keys)
                     if (balances[addr] > dMinBal)
                     {
@@ -151,10 +152,10 @@ namespace cli_vote
                         string[] strUtxo = utxo[addr].Split(",");
 
                         string input = "{\"txid\":\"" + strUtxo[0]  + "\",\"vout\":" + strUtxo[1] + "}";
-                        decimal utxoAmt = Convert.ToDecimal(strUtxo[2]);
+                        decimal utxoAmt = Convert.ToDecimal(strUtxo[2], new CultureInfo("en-US"));
                         decimal change = utxoAmt - 0.0001m;
 
-                        string output1 = "{\"" + addr + "\":" + change + "}";
+                        string output1 = "{\"" + addr + "\":" + change.ToString(new CultureInfo("en-US")) + "}";
                         string output2 = "{\"data\":\"" + txdata + "\"}";
 
                         string txparams = "[ [" + input + "], [" + output1 + "," + output2 + "]]";
